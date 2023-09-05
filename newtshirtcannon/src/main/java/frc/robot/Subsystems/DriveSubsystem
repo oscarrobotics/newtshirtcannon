@@ -1,0 +1,39 @@
+package frc.robot;
+
+public class DriveSubsysem extends SubsystemBase{
+    
+    //Where we establish our motors as objects on the robot
+    private final WPI_TalonFX m_leftMaster = new WPI_TalonFX(1);
+    private final WPI_TalonFX m_leftDrone = new WPI_TalonFX(2);
+    private final WPI_TalonFX m_rightMaster = new WPI_TalonFX(3);
+    private final WPI_TalonFX m_rightDrone = new WPI_TalonFX(4);
+    
+    //gyro
+    private final WPI_Pigeon2 m_gyro = new WPI_Pigeon2(0);
+
+    /*This is where motor groups are established. 
+        Motor groups are essential for Differential Drive (what we're using for this particular drivetrain),
+        given that they combine two separate motors into one controllable object.
+    */
+    private final MotorControllerGroup m_leftMotors = new MotorControllerGroup(m_leftMaster, m_leftDrone);
+    private final MotorControllerGroup m_rightMotors = new MotorControllerGroup(m_rightMaster, m_rightDrone);
+    　
+
+    /* Differential drivetrain kinematics determine the velocities 
+   to be calculated for each side of the differential drive train. 
+   
+   To use this calculation, the
+   TRACK WIDTH (space between the left/right sides of the wheels in meters) must be placed as a 
+   parameter. */
+
+   //TODO: change in place of actual values
+   public final DifferentialDriveKinematics m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(27));
+
+    public final DifferentialDrivePoseEstimator m_poseEstomator = new DifferentialDrivePoseEstimator(m_kinematics, new Rotation2D(0), 0.0, 0.0, new Pose2D());
+   
+   //worry about vision later
+
+    public DriveSubsysem(){
+        
+    }
+}
