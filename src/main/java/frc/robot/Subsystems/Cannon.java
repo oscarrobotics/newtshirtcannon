@@ -8,7 +8,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Cannon extends SubsystemBase{
-    AnalogPotentiometer transducer = new AnalogPotentiometer(2, 200,0);
+    AnalogPotentiometer transducer = new AnalogPotentiometer(0, 200,0);
+    //define compressors
     Compressor pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
     Compressor pcmCompressor2 = new Compressor(1, PneumaticsModuleType.CTREPCM);
 
@@ -22,6 +23,7 @@ public class Cannon extends SubsystemBase{
 
     public void fill(){
         //add code yayayayay
+
     }
 
 }

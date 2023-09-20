@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Subsystems.Drivetrain;
 
 public class RobotContainer {
-    
+
     private final CommandXboxController m_driverController = new CommandXboxController(0);
 
     private final Drivetrain m_drivetrain = new Drivetrain();
@@ -23,9 +23,9 @@ public class RobotContainer {
       
             m_drivetrain.smoothDrive(
                 -1 * m_driverController.getLeftY() * Math.abs(m_driverController.getLeftY()) * Smodifier
-                    * 4.267,
+                    * 1,
                 m_driverController.getRightX() * -1 * Math.abs(m_driverController.getRightX()) * Tmodifier
-                    * 4.267);
+                    * 1);
           }, m_drivetrain));
 
     }

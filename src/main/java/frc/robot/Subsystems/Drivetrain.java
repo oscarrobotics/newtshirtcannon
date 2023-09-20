@@ -23,10 +23,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Drivetrain extends SubsystemBase{
     
     //Where we establish our motors as objects on the robot
-    private final CANSparkMax m_leftMaster = new CANSparkMax(0, MotorType.kBrushless);
-    private final CANSparkMax m_leftDrone = new CANSparkMax(1, MotorType.kBrushless);
-    private final CANSparkMax m_rightMaster = new CANSparkMax(2, MotorType.kBrushless);
-    private final CANSparkMax m_rightDrone = new CANSparkMax(3, MotorType.kBrushless);
+    private final CANSparkMax m_leftMaster = new CANSparkMax(3, MotorType.kBrushless);
+    private final CANSparkMax m_leftDrone = new CANSparkMax(4, MotorType.kBrushless);
+    private final CANSparkMax m_rightMaster = new CANSparkMax(1, MotorType.kBrushless);
+    private final CANSparkMax m_rightDrone = new CANSparkMax(2, MotorType.kBrushless);
     
     //gyro
     private final WPI_Pigeon2 m_gyro = new WPI_Pigeon2(0);
@@ -42,6 +42,7 @@ public class Drivetrain extends SubsystemBase{
     //PID Controller obj
     private final SparkMaxPIDController m_leftPIDController;
     private final SparkMaxPIDController m_rightPIDController;
+    //ratio PID controller
 
     //Encoder obj
     // private final SparkMaxRelativeEncoder m_leftEncoder = m_leftMaster.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
@@ -67,10 +68,12 @@ public class Drivetrain extends SubsystemBase{
 
     final int kCountsPerRev = 42; //How many times the encoder will count per one revolution of the motor.
     final double kGearRatio = 10.71; //The gear ratio of the encoder relative to the wheel diameter.
-    final double kWheelRadiusInches = 3.55; //Radius of the wheel (inches)
+    final double kWheelDiameterInches = 3.55; //Radius of the wheel (inches)
     final int k100msPerSecond = 10;
+    
+    final double maxspeed = 1;
 
-    final double kP = 5;
+    final double kP = 0.5;
     final double kI = 0;
     final double kD = 0;
     final double kIz = 0;
@@ -122,32 +125,46 @@ public class Drivetrain extends SubsystemBase{
         //use the differntial drive invers kinematics class to set the motor controllers directly in velocity control mode
         DifferentialDriveWheelSpeeds wheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(speed, 0, rotation));
         
-        // System.out.print(wheelSpeeds.leftMetersPerSecond);
-        // System.out.print("*");
-        // System.out.println(wheelSpeeds.rightMetersPerSecond);
+        System.out.print(wheelSpeeds.leftMetersPerSecond);
+        System.out.print("*");
+        System.out.println(wheelSpeeds.rightMetersPerSecond);
        
-        double leftspeedtalon = velocityToNativeUnits( wheelSpeeds.leftMetersPerSecond );
-        double rightspeedtalon = velocityToNativeUnits( wheelSpeeds.rightMetersPerSecond );
-        // System.out.print(leftspeedtalon);
-        // System.out.print("  ");
-        // System.out.println(rightspeedtalon);
+        //Convert m/s to RPM
+        double leftspeedtalon = VelocitytoRPM( wheelSpeeds.leftMetersPerSecond );
+        double rightspeedtalon = VelocitytoRPM( wheelSpeeds.rightMetersPerSecond );
+        System.out.print(leftspeedtalon);
+        System.out.print("  ");
+        System.out.println(rightspeedtalon);
+
+        System.out.print(m_leftMaster.getEncoder().getVelocity());
+        System.out.print("  ");
+        System.out.println(m_rightMaster.getEncoder().getVelocity());
     
         m_leftMaster.set(leftspeedtalon);
         m_rightMaster.set(rightspeedtalon);
         m_leftDrone.follow(m_leftMaster);
         m_rightDrone.follow(m_rightMaster);
-
-    
-    
       }
 
 
 
-    private int velocityToNativeUnits(double velocityMetersPerSecond){
-        double wheelRotationsPerSecond = velocityMetersPerSecond/(2 * Math.PI * Units.inchesToMeters(kWheelRadiusInches));
-        double motorRotationsPerSecond = wheelRotationsPerSecond * kGearRatio;
-        double motorRotationsPer100ms = motorRotationsPerSecond / k100msPerSecond;
-        int sensorCountsPer100ms = (int)(motorRotationsPer100ms * kCountsPerRev);
-        return sensorCountsPer100ms;
+    // private int velocityToNativeUnits(double velocityMetersPerSecond){
+    //     double wheelRotationsPerSecond = velocityMetersPerSecond/(2 * Math.PI * Units.inchesToMeters(kWheelRadiusInches));
+    //     double motorRotationsPerSecond = wheelRotationsPerSecond * kGearRatio;
+    //     double motorRotationsPer100ms = motorRotationsPerSecond / k100msPerSecond;
+    //     int sensorCountsPer100ms = (int)(motorRotationsPer100ms * kCountsPerRev);
+    //     return sensorCountsPer100ms;
+    //   }
+
+
+  
+    
+      //m/s to rpm
+      //Velocity(m/s) / wheel circumference (meters/revolution) * gear ratio (unitless) * 60 (seconds) --> dimensional analysis
+      private double VelocitytoRPM(double velocityMetersPerSecond){
+
+       return (velocityMetersPerSecond * 60 * kGearRatio) / ((Units.inchesToMeters(kWheelDiameterInches) * Math.PI));
+
       }
+
 }
