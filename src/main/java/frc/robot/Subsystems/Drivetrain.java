@@ -125,20 +125,20 @@ public class Drivetrain extends SubsystemBase{
         //use the differntial drive invers kinematics class to set the motor controllers directly in velocity control mode
         DifferentialDriveWheelSpeeds wheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(speed, 0, rotation));
         
-        System.out.print(wheelSpeeds.leftMetersPerSecond);
-        System.out.print("*");
-        System.out.println(wheelSpeeds.rightMetersPerSecond);
+        // System.out.print(wheelSpeeds.leftMetersPerSecond);
+        // System.out.print("*");
+        // System.out.println(wheelSpeeds.rightMetersPerSecond);
        
         //Convert m/s to RPM
         double leftspeedtalon = VelocitytoRPM( wheelSpeeds.leftMetersPerSecond );
         double rightspeedtalon = VelocitytoRPM( wheelSpeeds.rightMetersPerSecond );
-        System.out.print(leftspeedtalon);
-        System.out.print("  ");
-        System.out.println(rightspeedtalon);
+        // System.out.print(leftspeedtalon);
+        // System.out.print("  ");
+        // System.out.println(rightspeedtalon);
 
-        System.out.print(m_leftMaster.getEncoder().getVelocity());
-        System.out.print("  ");
-        System.out.println(m_rightMaster.getEncoder().getVelocity());
+        // System.out.print(m_leftMaster.getEncoder().getVelocity());
+        // System.out.print("  ");
+        // System.out.println(m_rightMaster.getEncoder().getVelocity());
     
         m_leftPIDController.setReference(leftspeedtalon,CANSparkMax.ControlType.kVelocity);
         m_rightPIDController.setReference(rightspeedtalon,CANSparkMax.ControlType.kVelocity);

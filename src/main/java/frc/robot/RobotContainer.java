@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Subsystems.Cannon;
 import frc.robot.Subsystems.Drivetrain;
 
 public class RobotContainer {
@@ -9,6 +10,7 @@ public class RobotContainer {
     private final CommandXboxController m_driverController = new CommandXboxController(0);
 
     private final Drivetrain m_drivetrain = new Drivetrain();
+    private final Cannon m_cannon = new Cannon();
     
     public RobotContainer(){
 
@@ -27,6 +29,8 @@ public class RobotContainer {
                 m_driverController.getRightX() * -1 * Math.abs(m_driverController.getRightX()) * Tmodifier
                     * 1);
           }, m_drivetrain));
+
+          m_cannon.setDefaultCommand(Commands.run(() -> m_cannon.fill(),m_cannon));
 
     }
 }
