@@ -66,18 +66,18 @@ public class Drivetrain extends SubsystemBase{
     //worry about vision later
 
 
-    final int kCountsPerRev = 42; //How many times the encoder will count per one revolution of the motor.
+    final int kCountsPerRev = 1; //How many times the encoder will count per one revolution of the motor.
     final double kGearRatio = 10.71; //The gear ratio of the encoder relative to the wheel diameter.
     final double kWheelDiameterInches = 3.55; //Radius of the wheel (inches)
     final int k100msPerSecond = 10;
     
     final double maxspeed = 1;
 
-    final double kP = 0.5;
+    final double kP = 0.0002;
     final double kI = 0;
     final double kD = 0;
     final double kIz = 0;
-    final double kFF = 0;
+    final double kFF = 0.0002;
 
     private SlewRateLimiter slewLimit = new SlewRateLimiter(6, -6, 0);
 
@@ -85,10 +85,10 @@ public class Drivetrain extends SubsystemBase{
 
         m_gyro.reset();
 
-        m_rightMaster.setInverted(false);
-        m_rightDrone.setInverted(false);
-        m_leftMaster.setInverted(true);
-        m_leftDrone.setInverted(true);
+        m_rightMaster.setInverted(true);
+        m_rightDrone.setInverted(true);
+        m_leftMaster.setInverted(false);
+        m_leftDrone.setInverted(false);
 
         m_leftMaster.setIdleMode(IdleMode.kBrake);
         m_leftDrone.setIdleMode(IdleMode.kBrake);
@@ -140,8 +140,8 @@ public class Drivetrain extends SubsystemBase{
         System.out.print("  ");
         System.out.println(m_rightMaster.getEncoder().getVelocity());
     
-        m_leftMaster.set(leftspeedtalon);
-        m_rightMaster.set(rightspeedtalon);
+        m_leftPIDController.setReference(leftspeedtalon,CANSparkMax.ControlType.kVelocity);
+        m_rightPIDController.setReference(rightspeedtalon,CANSparkMax.ControlType.kVelocity);
         m_leftDrone.follow(m_leftMaster);
         m_rightDrone.follow(m_rightMaster);
       }

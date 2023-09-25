@@ -18,7 +18,7 @@ public class Cannon extends SubsystemBase{
 
     }
 
-    //fill: 120 Psi
+    //fill: 120 Psi -> can't go above 125 psi
     //Shoot: 60 Psi
 
     public void fill(){
