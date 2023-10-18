@@ -79,7 +79,7 @@ public class Drivetrain extends SubsystemBase{
     final double kIz = 0;
     final double kFF = 0.0002;
 
-    private SlewRateLimiter slewLimit = new SlewRateLimiter(6, -6, 0);
+    private SlewRateLimiter slewLimit = new SlewRateLimiter(3, -3, 0);
 
     public Drivetrain(){
 
